@@ -85,11 +85,11 @@ async function analyzeContent(content) {
             messages: [
                 {
                     role: 'system',
-                    content: 'You are a helpful assistant that summarizes articles and answers questions about them.'
+                    content: 'You are a helpful assistant that summarizes articles in markdown format. Focus on key points and main ideas. Use bullet points and headers to organize the information.'
                 },
                 {
                     role: 'user',
-                    content: `Please summarize this article in bullet points:\n\n${content}`
+                    content: `Please summarize this article in markdown format, focusing on key points and main ideas:\n\n${content}`
                 }
             ],
             max_tokens: 500
@@ -124,7 +124,7 @@ async function answerQuestion(question, content) {
             messages: [
                 {
                     role: 'system',
-                    content: 'You are a helpful assistant that answers questions about articles.'
+                    content: 'You are a helpful assistant that answers questions about articles in a clear and concise way.'
                 },
                 {
                     role: 'user',

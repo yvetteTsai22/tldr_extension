@@ -1,147 +1,288 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>TLDR Reader</title>
+    <title>Article Assistant</title>
     <style>
         body {
-            width: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
             padding: 16px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: #333;
         }
-        .container {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
+
         .section {
-            background: #f5f5f5;
-            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
             border-radius: 8px;
+            overflow: hidden;
         }
+
         .section-header {
+            padding: 12px 16px;
+            background-color: #f5f5f5;
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            cursor: pointer;
             user-select: none;
         }
-        .section-header h2 {
-            margin: 0;
-            font-size: 1.2em;
+
+        .section-header:hover {
+            background-color: #e8e8e8;
         }
+
         .section-content {
-            margin-top: 16px;
+            padding: 16px;
             display: none;
         }
+
         .section-content.active {
             display: block;
         }
-        .summary {
+
+        .summary-content {
             white-space: pre-wrap;
             line-height: 1.5;
         }
+
+        /* Markdown Styles */
+        .summary-content h1,
+        .summary-content h2,
+        .summary-content h3,
+        .summary-content h4,
+        .summary-content h5,
+        .summary-content h6 {
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            line-height: 1.25;
+        }
+
+        .summary-content h1 {
+            font-size: 2em;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3em;
+        }
+
+        .summary-content h2 {
+            font-size: 1.5em;
+            border-bottom: 1px solid #eaecef;
+            padding-bottom: 0.3em;
+        }
+
+        .summary-content h3 {
+            font-size: 1.25em;
+        }
+
+        .summary-content h4 {
+            font-size: 1em;
+        }
+
+        .summary-content p {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        .summary-content ul,
+        .summary-content ol {
+            padding-left: 2em;
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        .summary-content li {
+            margin-bottom: 0.25em;
+        }
+
+        .summary-content li > p {
+            margin-top: 16px;
+        }
+
+        .summary-content code {
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 85%;
+            background-color: rgba(27, 31, 35, 0.05);
+            border-radius: 3px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        .summary-content pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #f6f8fa;
+            border-radius: 3px;
+        }
+
+        .summary-content pre code {
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            border: 0;
+            word-break: normal;
+            white-space: pre;
+        }
+
+        .summary-content blockquote {
+            padding: 0 1em;
+            color: #6a737d;
+            border-left: 0.25em solid #dfe2e5;
+            margin: 0 0 16px 0;
+        }
+
         .chat-container {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            height: 300px;
         }
+
         .chat-messages {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            max-height: 300px;
+            flex-grow: 1;
             overflow-y: auto;
+            margin-bottom: 16px;
             padding: 8px;
-            background: white;
+            border: 1px solid #e0e0e0;
             border-radius: 4px;
         }
+
         .message {
-            padding: 8px 12px;
-            border-radius: 8px;
-            max-width: 80%;
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 4px;
         }
-        .message.user {
-            background: #007AFF;
-            color: white;
-            align-self: flex-end;
+
+        .user-message {
+            background-color: #e3f2fd;
+            margin-left: 20%;
         }
-        .message.assistant {
-            background: #E9ECEF;
-            color: #212529;
-            align-self: flex-start;
+
+        .assistant-message {
+            background-color: #f5f5f5;
+            margin-right: 20%;
         }
-        .message.error {
-            background: #DC3545;
-            color: white;
-            align-self: center;
+
+        .assistant-message h1,
+        .assistant-message h2,
+        .assistant-message h3,
+        .assistant-message h4,
+        .assistant-message h5,
+        .assistant-message h6 {
+            margin-top: 16px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            line-height: 1.25;
         }
-        .chat-input {
+
+        .assistant-message h1 {
+            font-size: 1.5em;
+        }
+
+        .assistant-message h2 {
+            font-size: 1.25em;
+        }
+
+        .assistant-message h3 {
+            font-size: 1.1em;
+        }
+
+        .assistant-message p {
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .assistant-message ul,
+        .assistant-message ol {
+            padding-left: 1.5em;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+
+        .assistant-message li {
+            margin-bottom: 0.25em;
+        }
+
+        .assistant-message code {
+            padding: 0.2em 0.4em;
+            margin: 0;
+            font-size: 85%;
+            background-color: rgba(27, 31, 35, 0.05);
+            border-radius: 3px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        .input-container {
             display: flex;
             gap: 8px;
         }
-        input {
-            flex: 1;
+
+        #questionInput {
+            flex-grow: 1;
             padding: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid #e0e0e0;
             border-radius: 4px;
         }
+
         button {
             padding: 8px 16px;
-            background: #007AFF;
+            background-color: #1a73e8;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
         }
+
         button:hover {
-            background: #0056b3;
+            background-color: #1557b0;
         }
+
         button:disabled {
-            background: #ccc;
+            background-color: #ccc;
             cursor: not-allowed;
         }
+
         .loading {
+            display: none;
             text-align: center;
+            padding: 16px;
             color: #666;
-            padding: 20px;
         }
-        .toggle-icon {
-            transition: transform 0.3s ease;
-        }
-        .toggle-icon.active {
-            transform: rotate(180deg);
+
+        .loading.active {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="section">
-            <div class="section-header" id="summary-header">
-                <h2>Summary</h2>
-                <span class="toggle-icon">▼</span>
-            </div>
-            <div class="section-content" id="summary-content">
-                <div id="summary" class="summary">Click to generate summary...</div>
-            </div>
+    <div class="section">
+        <div class="section-header" id="summaryHeader">
+            <span>Summary</span>
+            <span class="toggle-icon">▼</span>
         </div>
-        
-        <div class="section">
-            <div class="section-header" id="chat-header">
-                <h2>Ask Anything</h2>
-                <span class="toggle-icon">▼</span>
-            </div>
-            <div class="section-content" id="chat-content">
-                <div class="chat-container">
-                    <div id="chat-messages" class="chat-messages"></div>
-                    <div class="chat-input">
-                        <input type="text" id="question-input" placeholder="Ask a question about the article...">
-                        <button id="ask-button">Ask</button>
-                    </div>
-                </div>
-            </div>
+        <div class="section-content" id="summaryContent">
+            <div class="summary-content">Click to generate summary...</div>
+            <div class="loading" id="summaryLoading">Generating summary...</div>
         </div>
     </div>
+
+    <div class="section">
+        <div class="section-header" id="chatHeader">
+            <span>Ask Anything</span>
+            <span class="toggle-icon">▼</span>
+        </div>
+        <div class="section-content" id="chatContent">
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="input-container">
+                    <input type="text" id="questionInput" placeholder="Type your question...">
+                    <button id="askButton">Ask</button>
+                </div>
+            </div>
+            <div class="loading" id="chatLoading">Processing question...</div>
+        </div>
+    </div>
+
     <script src="../panel.js"></script>
 </body>
 </html> 
