@@ -1,50 +1,48 @@
-// Extract main article content
-function extractArticleContent() {
-    // Try to find the main article content
+// Debug logging
+function debugLog(message, data = null) {
+    const timestamp = new Date().toISOString();
+    const logMessage = data ? `${timestamp} - ${message}: ${JSON.stringify(data)}` : `${timestamp} - ${message}`;
+    console.log(logMessage);
+}
+
+debugLog('Content script loaded');
+
+// Extract article content
+function extractContent() {
+    debugLog('Extracting content');
+    // Try to find the main article element
     const article = document.querySelector('article') || 
-                   document.querySelector('[role="article"]') ||
-                   document.querySelector('.article') ||
-                   document.querySelector('.post') ||
+                   document.querySelector('[role="article"]') || 
+                   document.querySelector('.article') || 
+                   document.querySelector('.post') || 
                    document.querySelector('.content');
     
-    if (!article) return document.body.innerText;
+    if (!article) {
+        debugLog('No article found, using body text');
+        return document.body.innerText;
+    }
+    
+    debugLog('Article found, processing content');
+    // Clone the article to avoid modifying the original
+    const articleClone = article.cloneNode(true);
     
     // Remove unwanted elements
-    const clone = article.cloneNode(true);
-    const unwanted = clone.querySelectorAll('script, style, nav, footer, header, aside, .comments, .sidebar');
-    unwanted.forEach(el => el.remove());
+    articleClone.querySelectorAll('script, style, nav, footer, header, aside, .comments, .sidebar').forEach(el => el.remove());
     
-    return clone.innerText.trim();
+    return articleClone.innerText.trim();
 }
 
-// Highlight key phrases
-function highlightKeyPhrases(text) {
-    const words = text.split(/\s+/);
-    const keyPhrases = new Set([
-        'important', 'key', 'significant', 'major', 'critical',
-        'essential', 'crucial', 'vital', 'fundamental', 'primary'
-    ]);
-    
-    words.forEach(word => {
-        if (keyPhrases.has(word.toLowerCase())) {
-            const span = document.createElement('span');
-            span.className = 'tldr-highlight';
-            span.textContent = word;
-            span.title = 'Click for definition';
-            word.parentNode.replaceChild(span, word);
-        }
-    });
-}
-
-// Initialize the extension
+// Initialize content script
 function initialize() {
-    // Extract and send content to background script
-    const content = extractArticleContent();
+    debugLog('Initializing content script');
+    const content = extractContent();
+    
+    // Send content for analysis
     chrome.runtime.sendMessage({
         type: 'ANALYZE_CONTENT',
         content: content
     });
-    
+
     // Add highlight styles
     const style = document.createElement('style');
     style.textContent = `
@@ -58,21 +56,69 @@ function initialize() {
         }
     `;
     document.head.appendChild(style);
-    
+
     // Highlight key phrases
-    highlightKeyPhrases(document.body);
+    function highlightKeyPhrases() {
+        debugLog('Highlighting key phrases');
+        const keyPhrases = new Set([
+            'important', 'key', 'significant', 'major', 'critical',
+            'essential', 'crucial', 'vital', 'fundamental', 'primary'
+        ]);
+
+        // Function to process text nodes
+        function processTextNode(node) {
+            const text = node.textContent;
+            const words = text.split(/\s+/);
+            let hasHighlight = false;
+
+            words.forEach(word => {
+                if (keyPhrases.has(word.toLowerCase())) {
+                    hasHighlight = true;
+                }
+            });
+
+            if (hasHighlight) {
+                const span = document.createElement('span');
+                span.innerHTML = text.replace(
+                    new RegExp(`\\b(${Array.from(keyPhrases).join('|')})\\b`, 'gi'),
+                    '<span class="tldr-highlight" title="Click for definition">$1</span>'
+                );
+                node.parentNode.replaceChild(span, node);
+            }
+        }
+
+        // Walk through all text nodes in the document
+        const walker = document.createTreeWalker(
+            document.body,
+            NodeFilter.SHOW_TEXT,
+            null,
+            false
+        );
+
+        let node;
+        while (node = walker.nextNode()) {
+            processTextNode(node);
+        }
+    }
+
+    highlightKeyPhrases();
 }
 
 // Listen for messages from the side panel
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    debugLog('Received message', message);
     if (message.type === 'GET_CONTENT') {
-        sendResponse({ content: extractArticleContent() });
+        const content = extractContent();
+        debugLog('Sending content response');
+        sendResponse({ content: content });
     }
 });
 
 // Initialize when the page is loaded
 if (document.readyState === 'complete') {
+    debugLog('Document already loaded, initializing');
     initialize();
 } else {
+    debugLog('Waiting for document load');
     window.addEventListener('load', initialize);
 } 
