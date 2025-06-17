@@ -1,0 +1,8 @@
+.tldr-highlight {
+  background-color: #fff3cd;
+  cursor: pointer;
+  border-bottom: 1px dotted #ffc107;
+}
+.tldr-highlight:hover {
+  background-color: #ffe69c;
+} 
