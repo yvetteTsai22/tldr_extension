@@ -2317,7 +2317,7 @@ marked__WEBPACK_IMPORTED_MODULE_0__.marked.setOptions({
 function toggleSection(header, content) {
   var isActive = content.classList.contains('active');
   content.classList.toggle('active');
-  header.querySelector('.toggle-icon').textContent = isActive ? '▼' : '▲';
+  header.querySelector('.toggle-icon').innerHTML = isActive ? '&#9660;' : '&#9650;';
 }
 summaryHeader.addEventListener('click', function () {
   toggleSection(summaryHeader, summaryContent);

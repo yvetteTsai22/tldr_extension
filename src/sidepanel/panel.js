@@ -33,7 +33,7 @@ marked.setOptions({
 function toggleSection(header, content) {
     const isActive = content.classList.contains('active');
     content.classList.toggle('active');
-    header.querySelector('.toggle-icon').textContent = isActive ? '▼' : '▲';
+    header.querySelector('.toggle-icon').innerHTML = isActive ? '&#9660;' : '&#9650;';
 }
 
 summaryHeader.addEventListener('click', () => {
@@ -186,4 +186,4 @@ questionInput.addEventListener('keypress', (e) => {
         e.preventDefault();
         askButton.click();
     }
-}); 
+});
