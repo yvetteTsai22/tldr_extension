@@ -87,7 +87,7 @@ function analyzeContent(_x) {
 } // Answer question using OpenAI API
 function _analyzeContent() {
   _analyzeContent = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee(content) {
-    var response, data;
+    var systemMessage, response, data;
     return _regenerator().w(function (_context) {
       while (1) switch (_context.n) {
         case 0:
@@ -98,6 +98,7 @@ function _analyzeContent() {
           throw new Error('OpenAI API key not set');
         case 1:
           debugLog('Sending request to OpenAI API');
+          systemMessage = "You are an AI assistant that summarizes articles and answers questions about them.\nFor summaries, provide:\n1. Key Takeaways (in a callout):\n   - List 3-5 main points\n   - Use bullet points\n   - Keep each point concise\n2. Summary:\n   - Write 2-3 paragraphs\n   - Focus on main ideas and context\n   - Use clear, concise language\n\nFor questions, provide clear and concise answers based on the article content.";
           _context.n = 2;
           return fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -109,7 +110,7 @@ function _analyzeContent() {
               model: 'gpt-3.5-turbo',
               messages: [{
                 role: 'system',
-                content: 'You are a helpful assistant that summarizes articles in markdown format. Focus on key points and main ideas. Use bullet points and headers to organize the information.'
+                content: systemMessage
               }, {
                 role: 'user',
                 content: "Please summarize this article in markdown format, focusing on key points and main ideas:\n\n".concat(content)
@@ -144,7 +145,7 @@ function answerQuestion(_x2, _x3) {
 } // Handle API key updates
 function _answerQuestion() {
   _answerQuestion = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2(question, content) {
-    var response, data;
+    var systemMessage, response, data;
     return _regenerator().w(function (_context2) {
       while (1) switch (_context2.n) {
         case 0:
@@ -155,6 +156,7 @@ function _answerQuestion() {
           throw new Error('OpenAI API key not set');
         case 1:
           debugLog('Sending question to OpenAI API');
+          systemMessage = "You are an AI assistant that summarizes articles and answers questions about them.\nFor summaries, provide:\n1. Key Takeaways (in a callout):\n   - List 3-5 main points\n   - Use bullet points\n   - Keep each point concise\n2. Summary:\n   - Write 2-3 paragraphs\n   - Focus on main ideas and context\n   - Use clear, concise language\n\nFor questions, provide clear and concise answers based on the article content.";
           _context2.n = 2;
           return fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -166,7 +168,7 @@ function _answerQuestion() {
               model: 'gpt-3.5-turbo',
               messages: [{
                 role: 'system',
-                content: 'You are a helpful assistant that answers questions about articles in a clear and concise way.'
+                content: systemMessage
               }, {
                 role: 'user',
                 content: "Here is the article content:\n\n".concat(content, "\n\nQuestion: ").concat(question)

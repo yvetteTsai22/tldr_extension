@@ -74,6 +74,18 @@ async function analyzeContent(content) {
     }
 
     debugLog('Sending request to OpenAI API');
+    const systemMessage = `You are an AI assistant that summarizes articles and answers questions about them.
+For summaries, provide:
+1. Key Takeaways (in a callout):
+   - List 3-5 main points
+   - Use bullet points
+   - Keep each point concise
+2. Summary:
+   - Write 2-3 paragraphs
+   - Focus on main ideas and context
+   - Use clear, concise language
+
+For questions, provide clear and concise answers based on the article content.`;
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -85,7 +97,7 @@ async function analyzeContent(content) {
             messages: [
                 {
                     role: 'system',
-                    content: 'You are a helpful assistant that summarizes articles in markdown format. Focus on key points and main ideas. Use bullet points and headers to organize the information.'
+                    content: systemMessage
                 },
                 {
                     role: 'user',
@@ -113,6 +125,18 @@ async function answerQuestion(question, content) {
     }
 
     debugLog('Sending question to OpenAI API');
+    const systemMessage = `You are an AI assistant that summarizes articles and answers questions about them.
+For summaries, provide:
+1. Key Takeaways (in a callout):
+   - List 3-5 main points
+   - Use bullet points
+   - Keep each point concise
+2. Summary:
+   - Write 2-3 paragraphs
+   - Focus on main ideas and context
+   - Use clear, concise language
+
+For questions, provide clear and concise answers based on the article content.`;
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -124,7 +148,7 @@ async function answerQuestion(question, content) {
             messages: [
                 {
                     role: 'system',
-                    content: 'You are a helpful assistant that answers questions about articles in a clear and concise way.'
+                    content: systemMessage
                 },
                 {
                     role: 'user',
