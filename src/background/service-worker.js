@@ -77,9 +77,25 @@ async function analyzeContent(content) {
     const systemMessage = `You are an AI assistant that summarizes articles and answers questions about them.
 For summaries, provide:
 1. Key Takeaways (in a callout):
+   Format as:
+   <div class="callout callout-style-default callout-note callout-titled">
+   <div class="callout-header d-flex align-content-center">
+   <div class="callout-icon-container">
+   <i class="callout-icon"></i>
+   </div>
+   <div class="callout-title-container flex-fill">
+   Key Takeaways
+   </div>
+   </div>
+   <div class="callout-body-container callout-body">
+   <ul>
    - List 3-5 main points
-   - Use bullet points
    - Keep each point concise
+   - Focus on most important insights
+   </ul>
+   </div>
+   </div>
+
 2. Summary:
    - Write 2-3 paragraphs
    - Focus on main ideas and context
@@ -128,9 +144,25 @@ async function answerQuestion(question, content) {
     const systemMessage = `You are an AI assistant that summarizes articles and answers questions about them.
 For summaries, provide:
 1. Key Takeaways (in a callout):
+   Format as:
+   <div class="callout callout-style-default callout-note callout-titled">
+   <div class="callout-header d-flex align-content-center">
+   <div class="callout-icon-container">
+   <i class="callout-icon"></i>
+   </div>
+   <div class="callout-title-container flex-fill">
+   Key Takeaways
+   </div>
+   </div>
+   <div class="callout-body-container callout-body">
+   <ul>
    - List 3-5 main points
-   - Use bullet points
    - Keep each point concise
+   - Focus on most important insights
+   </ul>
+   </div>
+   </div>
+
 2. Summary:
    - Write 2-3 paragraphs
    - Focus on main ideas and context

@@ -98,7 +98,7 @@ function _analyzeContent() {
           throw new Error('OpenAI API key not set');
         case 1:
           debugLog('Sending request to OpenAI API');
-          systemMessage = "You are an AI assistant that summarizes articles and answers questions about them.\nFor summaries, provide:\n1. Key Takeaways (in a callout):\n   - List 3-5 main points\n   - Use bullet points\n   - Keep each point concise\n2. Summary:\n   - Write 2-3 paragraphs\n   - Focus on main ideas and context\n   - Use clear, concise language\n\nFor questions, provide clear and concise answers based on the article content.";
+          systemMessage = "You are an AI assistant that summarizes articles and answers questions about them.\nFor summaries, provide:\n1. Key Takeaways (in a callout):\n   Format as:\n   <div class=\"callout callout-style-default callout-note callout-titled\">\n   <div class=\"callout-header d-flex align-content-center\">\n   <div class=\"callout-icon-container\">\n   <i class=\"callout-icon\"></i>\n   </div>\n   <div class=\"callout-title-container flex-fill\">\n   Key Takeaways\n   </div>\n   </div>\n   <div class=\"callout-body-container callout-body\">\n   <ul>\n   - List 3-5 main points\n   - Keep each point concise\n   - Focus on most important insights\n   </ul>\n   </div>\n   </div>\n\n2. Summary:\n   - Write 2-3 paragraphs\n   - Focus on main ideas and context\n   - Use clear, concise language\n\nFor questions, provide clear and concise answers based on the article content.";
           _context.n = 2;
           return fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
@@ -156,7 +156,7 @@ function _answerQuestion() {
           throw new Error('OpenAI API key not set');
         case 1:
           debugLog('Sending question to OpenAI API');
-          systemMessage = "You are an AI assistant that summarizes articles and answers questions about them.\nFor summaries, provide:\n1. Key Takeaways (in a callout):\n   - List 3-5 main points\n   - Use bullet points\n   - Keep each point concise\n2. Summary:\n   - Write 2-3 paragraphs\n   - Focus on main ideas and context\n   - Use clear, concise language\n\nFor questions, provide clear and concise answers based on the article content.";
+          systemMessage = "You are an AI assistant that summarizes articles and answers questions about them.\nFor summaries, provide:\n1. Key Takeaways (in a callout):\n   Format as:\n   <div class=\"callout callout-style-default callout-note callout-titled\">\n   <div class=\"callout-header d-flex align-content-center\">\n   <div class=\"callout-icon-container\">\n   <i class=\"callout-icon\"></i>\n   </div>\n   <div class=\"callout-title-container flex-fill\">\n   Key Takeaways\n   </div>\n   </div>\n   <div class=\"callout-body-container callout-body\">\n   <ul>\n   - List 3-5 main points\n   - Keep each point concise\n   - Focus on most important insights\n   </ul>\n   </div>\n   </div>\n\n2. Summary:\n   - Write 2-3 paragraphs\n   - Focus on main ideas and context\n   - Use clear, concise language\n\nFor questions, provide clear and concise answers based on the article content.";
           _context2.n = 2;
           return fetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',

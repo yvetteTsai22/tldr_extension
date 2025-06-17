@@ -255,30 +255,81 @@
 
         /* Callout Styles */
         .summary-content .callout {
+            margin: 1rem 0;
+            padding: 0;
+            border-radius: 0.4rem;
+            border: 1px solid #e0e0e0;
             background-color: #f8f9fa;
-            border-left: 4px solid #007AFF;
-            padding: 16px;
-            margin: 16px 0;
-            border-radius: 4px;
         }
 
-        .summary-content .callout h3 {
-            margin-top: 0;
-            color: #007AFF;
-            font-size: 1.1em;
+        .summary-content .callout-header {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background-color: #f1f3f5;
+            border-bottom: 1px solid #e0e0e0;
+            border-radius: 0.4rem 0.4rem 0 0;
         }
 
-        .summary-content .callout ul {
-            margin: 8px 0;
-            padding-left: 20px;
+        .summary-content .callout-icon-container {
+            display: flex;
+            align-items: center;
+            margin-right: 0.5rem;
         }
 
-        .summary-content .callout li {
-            margin-bottom: 8px;
+        .summary-content .callout-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: #007AFF;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E") no-repeat center;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E") no-repeat center;
         }
 
-        .summary-content .callout li:last-child {
+        .summary-content .callout-title-container {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .summary-content .callout-body-container {
+            padding: 1rem;
+        }
+
+        .summary-content .callout-body {
+            margin: 0;
+        }
+
+        .summary-content .callout-body ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .summary-content .callout-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-content .callout-body li:last-child {
             margin-bottom: 0;
+        }
+
+        /* Callout Variants */
+        .summary-content .callout-note {
+            border-left: 4px solid #007AFF;
+        }
+
+        .summary-content .callout-tip {
+            border-left: 4px solid #28a745;
+        }
+
+        .summary-content .callout-warning {
+            border-left: 4px solid #ffc107;
+        }
+
+        .summary-content .callout-caution {
+            border-left: 4px solid #dc3545;
+        }
+
+        .summary-content .callout-important {
+            border-left: 4px solid #6f42c1;
         }
 
         /* Summary Section Styles */
