@@ -2335,13 +2335,15 @@ function generateSummary() {
 } // Inject content script
 function _generateSummary() {
   _generateSummary = _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee2() {
-    var _yield$chrome$tabs$qu3, _yield$chrome$tabs$qu4, tab, response, _t2;
+    var summaryLoading, summaryText, _yield$chrome$tabs$qu3, _yield$chrome$tabs$qu4, tab, response, _t2;
     return _regenerator().w(function (_context2) {
       while (1) switch (_context2.n) {
         case 0:
           debugLog('Generating summary');
+          summaryLoading = document.getElementById('summaryLoading');
+          summaryText = document.getElementById('summaryText'); // Show loading state
           summaryLoading.classList.add('active');
-          summaryText.textContent = '';
+          summaryText.style.display = 'none';
           _context2.p = 1;
           _context2.n = 2;
           return chrome.tabs.query({
@@ -2391,14 +2393,12 @@ function _generateSummary() {
           console.error('Error generating summary:', _t2);
           debugLog('Error generating summary', _t2);
           summaryText.textContent = "Error: ".concat(_t2.message);
-        case 9:
-          _context2.p = 9;
+          summaryText.style.display = 'block';
           summaryLoading.classList.remove('active');
-          return _context2.f(9);
-        case 10:
+        case 9:
           return _context2.a(2);
       }
-    }, _callee2, null, [[1, 8, 9, 10]]);
+    }, _callee2, null, [[1, 8]]);
   }));
   return _generateSummary.apply(this, arguments);
 }
@@ -2442,8 +2442,15 @@ function _injectContentScript() {
 chrome.runtime.onMessage.addListener(function (message) {
   debugLog('Received message', message);
   if (message.type === 'CONTENT_ANALYZED') {
+    var _summaryLoading = document.getElementById('summaryLoading');
+    var _summaryText = document.getElementById('summaryText');
+
     // Convert markdown to HTML
-    summaryText.innerHTML = marked__WEBPACK_IMPORTED_MODULE_0__.marked.parse(message.summary);
+    _summaryText.innerHTML = marked__WEBPACK_IMPORTED_MODULE_0__.marked.parse(message.summary);
+    _summaryText.style.display = 'block';
+
+    // Remove loading state after content is rendered
+    _summaryLoading.classList.remove('active');
   }
 });
 

@@ -50,8 +50,12 @@ chatHeader.addEventListener('click', () => {
 // Generate summary
 async function generateSummary() {
     debugLog('Generating summary');
+    const summaryLoading = document.getElementById('summaryLoading');
+    const summaryText = document.getElementById('summaryText');
+    
+    // Show loading state
     summaryLoading.classList.add('active');
-    summaryText.textContent = '';
+    summaryText.style.display = 'none';
 
     try {
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -77,7 +81,7 @@ async function generateSummary() {
         console.error('Error generating summary:', error);
         debugLog('Error generating summary', error);
         summaryText.textContent = `Error: ${error.message}`;
-    } finally {
+        summaryText.style.display = 'block';
         summaryLoading.classList.remove('active');
     }
 }
@@ -102,8 +106,15 @@ async function injectContentScript(tabId) {
 chrome.runtime.onMessage.addListener((message) => {
     debugLog('Received message', message);
     if (message.type === 'CONTENT_ANALYZED') {
+        const summaryLoading = document.getElementById('summaryLoading');
+        const summaryText = document.getElementById('summaryText');
+        
         // Convert markdown to HTML
         summaryText.innerHTML = marked.parse(message.summary);
+        summaryText.style.display = 'block';
+        
+        // Remove loading state after content is rendered
+        summaryLoading.classList.remove('active');
     }
 });
 

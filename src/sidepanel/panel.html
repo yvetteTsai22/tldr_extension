@@ -346,6 +346,46 @@
             margin-bottom: 16px;
             line-height: 1.6;
         }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #007AFF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #summaryLoading {
+            display: none;
+        }
+
+        #summaryLoading.active {
+            display: block;
+        }
+
+        #summaryLoading.active .loading-spinner {
+            display: block;
+        }
+
+        .summary-content {
+            display: block;
+        }
+
+        /* Update existing loading styles */
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
@@ -355,8 +395,11 @@
             <span class="toggle-icon">&#9660;</span>
         </div>
         <div class="section-content" id="summaryContent">
-            <div class="summary-content">Click to generate summary...</div>
-            <div class="loading" id="summaryLoading">Generating summary...</div>
+            <div id="summaryLoading" class="loading">
+                <div class="loading-spinner"></div>
+                <div>Generating summary...</div>
+            </div>
+            <div class="summary-content" id="summaryText">Click to generate summary...</div>
         </div>
     </div>
 
